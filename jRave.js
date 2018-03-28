@@ -1,4 +1,4 @@
-// rave jQuery coded by @JonathanHosein and optimized for WordPress by @erikfromemios
+// rave jQuery coded by @JonathanHosein
 
 var feed1, feed3, feed4;
 
@@ -29,7 +29,7 @@ var date = new Date();
 
 for (let index = 0; index < raveFeeds.length; index++) {
     
-    date = raveFeeds[index].find("dc:date").text;
+    date = Date.parse(raveFeeds[index].find("dc:date").text); //Added Date.Parse 3/25... never tested
     
     if(date > streamingFeed)
     {
@@ -41,15 +41,3 @@ for (let index = 0; index < raveFeeds.length; index++) {
 
 $("#description").text(streamingFeed.find("description").text());
 $("#pubDate").text(streamingFeed.find("pubDate").text());   
-
-
-
-
-
-
-
-
-
-
-//jQuery("#description").text(feed3.find("description").text());
-//jQuery("#pubDate").text(feed3.find("pubDate").text());
