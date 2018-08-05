@@ -1,55 +1,25 @@
-// rave jQuery coded by @JonathanHosein and optimized for WordPress by @erikfromemios
+$(document).ready(()=>{
 
-var feed1, feed3, feed4;
+	getFeed();
+})
 
-$.get("https://www.getrave.com/rss/tntech/channel1", function (data) {
-    $(data).find("item").each(function () {
-        feed1 = $(this);
-    });
-});
 
-//Feed 2 is used for testing purposes.
+function getFeed() {
 
-$.get("https://www.getrave.com/rss/tntech/channel3", function (data) {
-    $(data).find("item").each(function () {
-        feed3 = $(this);
-   });
-});
+var feedList = [
+"https://www.getrave.com/rss/tntech/channel1",
+"https://www.getrave.com/rss/tntech/channel3",
+"https://www.getrave.com/rss/tntech/channel4"
+]
 
-$.get("https://www.getrave.com/rss/tntech/channel4", function (data) {
-    $(data).find("item").each(function () {
-        feed4 = $(this);
-   });
-});
-
-var raveFeeds = [feed1, feed3, feed4];
-var streamingFeed;
-var streamingFeedDate = new Date();
-var date = new Date();
-
-for (let index = 0; index < raveFeeds.length; index++) {
+//TODO create array with feed data
+$.get("https://www.getrave.com/rss/tntech/channel1", (data) => {
+		console.log(data);
     
-    date = raveFeeds[index].find("dc:date").text;
+    var alertDate = $(data).find("channel").children("Item").find(":last-child").text();
+    console.log(alertDate);
+    console.log(Date.parse(alertDate));
     
-    if(date > streamingFeed)
-    {
-        streamingFeed = raveFeeds[index];
-        streamingFeedDate = date;
+});
 
-    }
-};
-
-$("#description").text(streamingFeed.find("description").text());
-$("#pubDate").text(streamingFeed.find("pubDate").text());   
-
-
-
-
-
-
-
-
-
-
-//jQuery("#description").text(feed3.find("description").text());
-//jQuery("#pubDate").text(feed3.find("pubDate").text());
+}
