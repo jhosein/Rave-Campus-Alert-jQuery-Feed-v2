@@ -1,25 +1,44 @@
 $(document).ready(()=>{
 
-	getFeed();
+	var alerts = getFeed();
 })
 
 
-function getFeed() {
+async function getFeed() {
 
 var feedList = [
 "https://www.getrave.com/rss/tntech/channel1",
 "https://www.getrave.com/rss/tntech/channel3",
 "https://www.getrave.com/rss/tntech/channel4"
-]
+],
 
-//TODO create array with feed data
-$.get("https://www.getrave.com/rss/tntech/channel1", (data) => {
-		console.log(data);
-    
-    var alertDate = $(data).find("channel").children("Item").find(":last-child").text();
-    console.log(alertDate);
-    console.log(Date.parse(alertDate));
-    
-});
+alertList = [];
 
+
+for (let i = 0; i < feedList.length; i++){
+  var alertData = {};
+  
+  await $.ajax({
+    url : feedList[i],
+    type: "get",
+    async: true,
+    success : (data) => {
+      alertData.date = $(data).find("channel").children("Item").find(":last-child").text();
+      alertData.title = $(data).find("channel").children("Item").find("title").text();
+      alertData.desc = $(data).find("channel").children("Item").find("description").text();
+    },
+    error: ()=>{
+      alert("error loading feed");
+    }
+  });
+
+
+
+
+
+
+  alertList.push(alertData);
+  console.log(alertList);
+}
+return alertList;
 }
