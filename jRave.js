@@ -15,7 +15,6 @@ async function getFeed() {
   "https://www.getrave.com/rss/tntech/channel3",
   "https://www.getrave.com/rss/tntech/channel4"
   ],
-
   alertList = [];
 
 
@@ -27,16 +26,16 @@ async function getFeed() {
       type: "get",
       async: true,
       success : (data) => {
-        alertData.date = $(data).find("channel").children("Item").find(":last-child").text();
         alertData.title = $(data).find("channel").children("Item").find("title").text();
         alertData.desc = $(data).find("channel").children("Item").find("description").text();
+        alertData.date = $(data).find("channel").children("Item").find(":last-child").text();
     },
     error: ()=>{
       alert("error loading feed");
     }
   });
-
   alertList.push(alertData);
+  
   }
 return getLatest(alertList);
 }
