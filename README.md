@@ -1,4 +1,3 @@
-# STILL WIP
 ## Rave Campus Alert jQuery Feed v2
 
 Rave is a college campus saftey solution for personal saftey and mass communication.
