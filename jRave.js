@@ -1,14 +1,9 @@
 $(document).ready(()=>{
+  
+  var raveAlert = {};
 
-  var raveAlert = {},
-  ravePromise = Promise.resolve(getFeed()); //since request is async, returned value is a promise
-    ravePromise.then( (result) => {         //parse promise into raveAlert var
-    raveAlert.date = result.date;
-    raveAlert.desc = result.desc;
-    raveAlert.title = result.title;
-  });
+  getFeed().then(result => $('#alert').html(result.title + "<br>" + result.desc + "<br>" + result.date) );
 
-  console.log(raveAlert.date);
 
 })
 
