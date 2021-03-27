@@ -1,55 +1,56 @@
-// rave jQuery coded by @JonathanHosein and optimized for WordPress by @erikfromemios
+$(document).ready(()=>{
+  
+  var raveAlert = {};
 
-var feed1, feed3, feed4;
+  getFeed().then(result => $('#alert').html(result.title + "<br>" + result.desc + "<br>" + result.date) );
 
-$.get("https://www.getrave.com/rss/tntech/channel1", function (data) {
-    $(data).find("item").each(function () {
-        feed1 = $(this);
-    });
-});
 
-//Feed 2 is used for testing purposes.
+})
 
-$.get("https://www.getrave.com/rss/tntech/channel3", function (data) {
-    $(data).find("item").each(function () {
-        feed3 = $(this);
-   });
-});
 
-$.get("https://www.getrave.com/rss/tntech/channel4", function (data) {
-    $(data).find("item").each(function () {
-        feed4 = $(this);
-   });
-});
+async function getFeed() {
 
-var raveFeeds = [feed1, feed3, feed4];
-var streamingFeed;
-var streamingFeedDate = new Date();
-var date = new Date();
+  var feedList = [
+  "https://www.getrave.com/rss/tntech/channel1",
+  "https://www.getrave.com/rss/tntech/channel3",
+  "https://www.getrave.com/rss/tntech/channel4"
+  ],
+  alertList = [];
 
-for (let index = 0; index < raveFeeds.length; index++) {
-    
-    date = raveFeeds[index].find("dc:date").text;
-    
-    if(date > streamingFeed)
-    {
-        streamingFeed = raveFeeds[index];
-        streamingFeedDate = date;
 
+  for (let i = 0; i < feedList.length; i++){
+    var alertData = {};
+  
+    await $.ajax({
+      url : feedList[i],
+      type: "get",
+      async: true,
+      success : (data) => {
+        alertData.title = $(data).find("channel").children("Item").find("title").text();
+        alertData.desc = $(data).find("channel").children("Item").find("description").text();
+        alertData.date = $(data).find("channel").children("Item").find(":last-child").text();
+    },
+    error: ()=>{
+      alert("error loading feed");
     }
-};
+  });
+  alertList.push(alertData);
+  
+  }
+return getLatest(alertList);
+}
 
-$("#description").text(streamingFeed.find("description").text());
-$("#pubDate").text(streamingFeed.find("pubDate").text());   
+function getLatest(list) {
+  var mostRecentDate = 0,
+  mostRecentAlert;
 
+  for (let i = 0; i < list.length; i++) {
+      let currentDate = Date.parse(list[i].date);
 
-
-
-
-
-
-
-
-
-//jQuery("#description").text(feed3.find("description").text());
-//jQuery("#pubDate").text(feed3.find("pubDate").text());
+      if (currentDate > mostRecentDate) {
+        mostRecentDate = currentDate;
+        mostRecentAlert = list[i];
+      }
+  }
+  return mostRecentAlert;
+}
